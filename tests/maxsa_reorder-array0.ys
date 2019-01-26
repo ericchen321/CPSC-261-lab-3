@@ -13,20 +13,19 @@ main:
 
 .pos 0x1000
 maxSubArray:
-    pushq  %rbx
     irmovq $1, %r9
+    subq   %rsi, %r9
+    je     L10
+    
+    pushq  %rbx
     pushq  %rbp
     pushq  %r12
     pushq  %r13
-    subq   %rsi, %r9
     pushq  %r14
         
-    jne    L1
     
-    rmmovq %rdi, (%rcx)
-    rmmovq %rdi, (%rdx)
     
-    jmp    L9
+    
 L1:
     rrmovq %rsi, %rbx
     irmovq $2, %r10
@@ -131,7 +130,13 @@ L9:
     popq   %rbx
     ret
     
-    
+
+L10:
+    rmmovq %rdi, (%rcx)
+    rmmovq %rdi, (%rdx)
+    rrmovq %r13, %rax
+    ret
+
 .pos 0x2000
 array:
     .quad 13
