@@ -52,11 +52,41 @@ L1:
     xorq   %rbx, %rbx                       # rbx has sum2
 
 
-
-L2:                                         # loop: for (ptr1 = mid - 1, sum = 0; ptr1 >= array; ptr--)
+L2:                                         # loop: while (ptr1 >= array || ptr2 <= end)
     rrmovq %r11, %r12
     subq   %rdi, %r12
-    jl     L5                               # ptr1 < array, exit loop
+    jl     PTR2TEST                         # if (ptr1 < array) then test right only
+    rrmovq %r14, %rbp
+    subq   %r9, %rbp
+    jg     PTR1TEST                         # if (ptr1 >= array && ptr2 > end) then test left only
+
+    mrmovq (%r11), %r12                     # if (ptr1 >= array && ptr2 <= end) then do both
+    addq   %r12, %rax
+    rrmovq %rax, %r12
+    subq   %r10, %r12
+    jle    L11                              # if (sum <= leftsum), jump to L11
+    rrmovq %rax, %r10                       # left_sum = sum
+    rmmovq %r11, (%rdx)                     # *sa_start = ptr1
+L11:
+    subq   %r8, %r11                        # ptr1--
+    
+    mrmovq (%r14), %rbp
+    addq   %rbp, %rbx
+    rrmovq %rbx, %rbp
+    subq   %r13, %rbp
+    jle    L12                              # if (sum2 <= rightsum), jumpt to L12
+    rrmovq %rbx, %r13                       # right_sum = sum2
+    rmmovq %r14, (%rcx)                     # *sa_end = ptr2
+L12:
+    addq   %r8, %r14                        # ptr2++
+    jmp    L2                               # jump to testing ptr1 and ptr2
+
+
+
+PTR1TEST:                                   # loop: for (ptr1 = mid - 1, sum = 0; ptr1 >= array; ptr--)
+    rrmovq %r11, %r12
+    subq   %rdi, %r12
+    jl     L7                               # ptr1 < array, exit loop
     mrmovq (%r11), %r12
     addq   %r12, %rax
     rrmovq %rax, %r12
@@ -66,10 +96,11 @@ L2:                                         # loop: for (ptr1 = mid - 1, sum = 0
     rmmovq %r11, (%rdx)                     # *sa_start = ptr1
 L3:
     subq   %r8, %r11                        # ptr1-- 
-    jmp    L2                               # jump to first instruction in the loop
+    jmp    PTR1TEST                         # jump to first instruction in the loop
 
 
-L5:                                         # loop: for (ptr = mid, sum = 0; ptr <= end; ptr++)
+
+PTR2TEST:                                   # loop: for (ptr = mid, sum = 0; ptr <= end; ptr++)                           
     rrmovq %r14, %rbp
     subq   %r9, %rbp
     jg     L7                               # ptr > end, then exit loop
@@ -82,10 +113,7 @@ L5:                                         # loop: for (ptr = mid, sum = 0; ptr
     rmmovq %r14, (%rcx)                     # *sa_end = ptr2
 L6:
     addq   %r8, %r14                        # ptr2++
-    jmp    L5                               # jump to first instruction in the loop
-
-
-
+    jmp    PTR2TEST                         # jump to first instruction in the loop
 
 
 
