@@ -22,21 +22,22 @@ maxSubArray:
     pushq  %r14
         
     jne    L1
-    mrmovq (%rdi), %r13
+    
     rmmovq %rdi, (%rcx)
     rmmovq %rdi, (%rdx)
     
     jmp    L9
 L1:
-    irmovq $2, %r10
     rrmovq %rsi, %rbx
+    irmovq $2, %r10
     divq   %r10, %rbx
     irmovq $8, %rbp
     mulq   %rbx, %rbp
-    addq   %rdi, %rbp
+    
     irmovq $8, %r8
     rrmovq %rsi, %r9
     mulq   %r8, %r9
+    addq   %rdi, %rbp
     addq   %rdi, %r9
     subq   %r8, %r9
     xorq   %rax, %rax
