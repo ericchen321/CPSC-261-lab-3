@@ -32,10 +32,12 @@ L1:
     irmovq $2, %r10
     divq   %r10, %rbx
     irmovq $8, %rbp
-    mulq   %rbx, %rbp
-    
     irmovq $8, %r8
     rrmovq %rsi, %r9
+    mulq   %rbx, %rbp
+    
+    
+    
     mulq   %r8, %r9
     addq   %rdi, %rbp
     addq   %rdi, %r9
