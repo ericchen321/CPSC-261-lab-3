@@ -61,8 +61,16 @@ L2:                                         # loop: while (ptr1 >= array || ptr2
     jg     PTR1TEST                         # if (ptr1 >= array && ptr2 > end) then test left only
 
     mrmovq (%r11), %r12                     # if (ptr1 >= array && ptr2 <= end) then do both
+#
+    mrmovq (%r14), %rbp
+    addq   %rbp, %rbx
+#    
     addq   %r12, %rax
     rrmovq %rax, %r12
+#
+    rrmovq %rbx, %rbp
+    
+#
     subq   %r10, %r12
     jle    L11                              # if (sum <= leftsum), jump to L11
     rrmovq %rax, %r10                       # left_sum = sum
@@ -70,9 +78,6 @@ L2:                                         # loop: while (ptr1 >= array || ptr2
 L11:
     subq   %r8, %r11                        # ptr1--
     
-    mrmovq (%r14), %rbp
-    addq   %rbp, %rbx
-    rrmovq %rbx, %rbp
     subq   %r13, %rbp
     jle    L12                              # if (sum2 <= rightsum), jumpt to L12
     rrmovq %rbx, %r13                       # right_sum = sum2
