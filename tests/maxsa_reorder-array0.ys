@@ -37,14 +37,17 @@ L1:
     mulq   %rbx, %rbp
     
     
-    
-    mulq   %r8, %r9
     addq   %rdi, %rbp
+    mulq   %r8, %r9
+    
     addq   %rdi, %r9
-    subq   %r8, %r9
     xorq   %rax, %rax
-    irmovq $0x8000000000000000, %r10
     rrmovq %rbp, %r11
+    irmovq $0x8000000000000000, %r10
+    subq   %r8, %r9
+    
+   
+    
     subq   %r8, %r11
 L2:
     rrmovq %r11, %r12
@@ -111,9 +114,10 @@ L8:
     rrmovq %rsp, %rcx
     call   maxSubArray
     popq   %rcx
-    popq   %rdx
+    
     rrmovq %rax, %r9
     subq   %r13, %r9
+    popq   %rdx
     jle    L9
     rrmovq %rax, %r13
     rmmovq %rdx, (%r12)
