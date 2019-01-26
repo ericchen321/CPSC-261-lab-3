@@ -79,21 +79,24 @@ L6:
     addq   %r8, %r11
     jmp    L5
 L7:
+    rrmovq %rsi, %r9
     addq   %r10, %r13
     rrmovq %rcx, %r14
-    rrmovq %rsi, %r9
+    
     subq   %rbx, %r9
+    pushq  %rdx
     rrmovq %rdx, %r12
     rrmovq %rbx, %rsi
     rrmovq %r9, %rbx
-    pushq  %rdx
+    
     rrmovq %rsp, %rdx
     pushq  %rcx
     rrmovq %rsp, %rcx
     call   maxSubArray
     popq   %rcx
-    popq   %rdx
+    
     rrmovq %rax, %r9
+    popq   %rdx
     subq   %r13, %r9
     jle    L8
     rrmovq %rax, %r13
