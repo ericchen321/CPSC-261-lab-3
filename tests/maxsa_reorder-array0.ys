@@ -125,12 +125,12 @@ L6:
 
 L7:
     popq   %rbp                             # pop mid from stack
+    rrmovq %rsi, %r9
     popq   %rbx                             # pop half from stack
     addq   %r10, %r13
-    rrmovq %rcx, %r14
-    rrmovq %rsi, %r9
-    subq   %rbx, %r9
+    rrmovq %rcx, %r14   
     rrmovq %rdx, %r12
+    subq   %rbx, %r9
     rrmovq %rbx, %rsi
     rrmovq %r9, %rbx
     pushq  %rdx
@@ -139,12 +139,12 @@ L7:
     rrmovq %rsp, %rcx
     call   maxSubArray
     popq   %rcx
-    popq   %rdx
     rrmovq %rax, %r9
+    popq   %rdx
     subq   %r13, %r9
     jle    L8
-    rrmovq %rax, %r13
     rmmovq %rdx, (%r12)
+    rrmovq %rax, %r13
     rmmovq %rcx, (%r14)
 L8:
     rrmovq %rbp, %rdi
@@ -163,8 +163,8 @@ L8:
     rmmovq %rdx, (%r12)
     rmmovq %rcx, (%r14)
 L9:
-    rrmovq %r13, %rax
     popq   %r14
+    rrmovq %r13, %rax
     popq   %r13
     popq   %r12
     popq   %rbp
