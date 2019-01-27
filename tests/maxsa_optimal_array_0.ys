@@ -1,0 +1,227 @@
+.pos 0x100
+main:
+    irmovq $stackEnd, %rsp
+    irmovq $array, %rdi
+    irmovq $arraySize, %rsi
+    mrmovq (%rsi), %rsi
+    irmovq $resultStart, %rdx
+    irmovq $resultEnd, %rcx
+    call   maxSubArray
+    irmovq $resultSum, %r8
+    rmmovq %rax, (%r8)
+    halt
+
+.pos 0x1000
+maxSubArray:
+    irmovq $1, %r9
+    subq   %rsi, %r9
+    je    L10
+
+    pushq  %rbx
+    
+    
+    
+    
+L1:
+    rrmovq %rsi, %rbx
+    irmovq $2, %r10
+    pushq  %rbp
+    divq   %r10, %rbx                       # rbx has half, half = size >> 1
+    irmovq $8, %rbp                         # rbp = 8
+    irmovq $8, %r8                          # r8 = 8
+    rrmovq %rsi, %r9                        # r9 has array size
+    mulq   %rbx, %rbp                       # rbp = 8 * half (offset)
+    
+    addq   %rdi, %rbp                       # rbp is long* mid, rbp = array base + offset
+    mulq   %r8, %r9                         # r9 = 8 * array size (size offset)
+    pushq  %r12
+    
+    
+    addq   %rdi, %r9                        # r9 = array base + size offset
+    xorq   %rax, %rax                       # rax has sum, sum = 0
+    rrmovq %rbp, %r11
+    irmovq $0x8000000000000000, %r10        # r10 has left_sum, leftsum = LONG_MIN
+    subq   %r8, %r9                         # r9 is long* end, r9 = array + base + size offset - 1
+
+    subq   %r8, %r11                        # r11 has ptr1, ptr1 = mid - 1
+    pushq  %r13
+    irmovq $0x8000000000000000, %r13        # r13 has right_sum, right_sum = LONG_MIN
+    pushq  %r14
+    
+    pushq  %rbx                             # save half to stack before the two for loops
+    pushq  %rbp                             # save mid to stack before the two for loops
+    
+    rrmovq %rbp, %r14                       # r14 has ptr2, ptr2 = mid
+    xorq   %rbx, %rbx                       # rbx has sum2
+
+
+L2:                                         # loop: while (ptr1 >= array || ptr2 <= end)
+    rrmovq %r11, %r12
+    subq   %rdi, %r12
+    jl     PTR2TEST                         # if (ptr1 < array) then test right only
+    rrmovq %r14, %rbp
+    subq   %r9, %rbp
+    jg     PTR1TEST                         # if (ptr1 >= array && ptr2 > end) then test left only
+
+    mrmovq (%r11), %r12                     # if (ptr1 >= array && ptr2 <= end) then do both
+#
+    mrmovq (%r14), %rbp
+    addq   %rbp, %rbx
+#    
+    addq   %r12, %rax
+    rrmovq %rax, %r12
+#
+    rrmovq %rbx, %rbp
+    
+#
+    subq   %r10, %r12
+    jle    L11                              # if (sum <= leftsum), jump to L11
+    rrmovq %rax, %r10                       # left_sum = sum
+    rmmovq %r11, (%rdx)                     # *sa_start = ptr1
+L11:
+    subq   %r8, %r11                        # ptr1--
+    
+    subq   %r13, %rbp
+    jle    L12                              # if (sum2 <= rightsum), jumpt to L12
+    rrmovq %rbx, %r13                       # right_sum = sum2
+    rmmovq %r14, (%rcx)                     # *sa_end = ptr2
+L12:
+    addq   %r8, %r14                        # ptr2++
+    jmp    L2                               # jump to testing ptr1 and ptr2
+
+
+
+PTR1TEST:                                   # loop: for (ptr1 = mid - 1, sum = 0; ptr1 >= array; ptr--)
+    rrmovq %r11, %r12
+    subq   %rdi, %r12
+    jl     L7                               # ptr1 < array, exit loop
+    mrmovq (%r11), %r12
+    addq   %r12, %rax
+    rrmovq %rax, %r12
+    subq   %r10, %r12
+    jle    L3                               # if (sum <= leftsum), jump to L3
+    rrmovq %rax, %r10                       # left_sum = sum
+    rmmovq %r11, (%rdx)                     # *sa_start = ptr1
+L3:
+    subq   %r8, %r11                        # ptr1-- 
+    jmp    PTR1TEST                         # jump to first instruction in the loop
+
+
+
+PTR2TEST:                                   # loop: for (ptr = mid, sum = 0; ptr <= end; ptr++)                           
+    rrmovq %r14, %rbp
+    subq   %r9, %rbp
+    jg     L7                               # ptr > end, then exit loop
+    mrmovq (%r14), %rbp
+    addq   %rbp, %rbx
+    rrmovq %rbx, %rbp
+    subq   %r13, %rbp
+    jle    L6                               # if (sum2 <= rightsum), jumpt to L6
+    rrmovq %rbx, %r13                       # right_sum = sum2
+    rmmovq %r14, (%rcx)                     # *sa_end = ptr2
+L6:
+    addq   %r8, %r14                        # ptr2++
+    jmp    PTR2TEST                         # jump to first instruction in the loop
+
+
+
+
+
+L7:
+    popq   %rbp                             # pop mid from stack
+    rrmovq %rsi, %r9
+    popq   %rbx                             # pop half from stack
+    addq   %r10, %r13
+    rrmovq %rcx, %r14   
+    rrmovq %rdx, %r12
+    subq   %rbx, %r9
+    rrmovq %rbx, %rsi
+    rrmovq %r9, %rbx
+    pushq  %rdx
+    rrmovq %rsp, %rdx
+    pushq  %rcx
+    rrmovq %rsp, %rcx
+    call   maxSubArray
+    popq   %rcx
+    rrmovq %rax, %r9
+    popq   %rdx
+    subq   %r13, %r9
+    jle    L8
+    rmmovq %rdx, (%r12)
+    rrmovq %rax, %r13
+    rmmovq %rcx, (%r14)
+L8:
+    rrmovq %rbp, %rdi
+    rrmovq %rbx, %rsi
+    pushq  %rdx
+    rrmovq %rsp, %rdx
+    pushq  %rcx
+    rrmovq %rsp, %rcx
+    call   maxSubArray
+    popq   %rcx
+    popq   %rdx
+    rrmovq %rax, %r9
+    subq   %r13, %r9
+    jle    L9
+    rrmovq %rax, %r13
+    rmmovq %rdx, (%r12)
+    rmmovq %rcx, (%r14)
+L9:
+    popq   %r14
+    rrmovq %r13, %rax
+    popq   %r13
+    popq   %r12
+    popq   %rbp
+    popq   %rbx
+    ret
+
+L10:
+    pushq %r13
+    rmmovq %rdi, (%rcx)
+    rmmovq %rdi, (%rdx)
+    mrmovq (%rdi), %r13
+    rrmovq %r13, %rax
+    popq %r13
+    ret
+
+
+.pos 0x2000
+array:
+    .quad 13
+    .quad -3
+    .quad -25
+    .quad -20
+    .quad -3
+    .quad -16
+    .quad -23
+    .quad 18
+    .quad 20
+    .quad -7
+    .quad 12
+    .quad -5
+    .quad -22
+    .quad 15
+    .quad -4
+    .quad 7
+arraySize:
+    .quad 16
+
+.pos 0x2500
+resultStart:
+    .quad 0
+resultEnd:
+    .quad 0
+resultSum:
+    .quad 0
+
+.pos 0x2600
+reference:
+     .quad 0x2038
+     .quad 0x2050
+     .quad 43
+
+.pos 0x4000
+stack:
+    .quad 0, 1000
+stackEnd:
+    .quad 0
