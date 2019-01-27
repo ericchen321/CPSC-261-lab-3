@@ -179,8 +179,9 @@ L10:
     rmmovq %rdi, (%rcx)
     rmmovq %rdi, (%rdx)
     rrmovq %r13, %rax
-    ret  
-    
+    ret
+
+
 .pos 0x2000
 array:
     .quad 13

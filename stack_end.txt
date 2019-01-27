@@ -1,0 +1,5 @@
+.pos 0x4000
+stack:
+    .quad 0, 1000
+stackEnd:
+    .quad 0
