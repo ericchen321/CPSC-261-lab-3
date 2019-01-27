@@ -55,17 +55,18 @@ L1:
     xorq   %rbx, %rbx                       # rbx has sum2
 
 
-L2:                                         # loop: while (ptr1 >= array || ptr2 <= end)
+BOTHPTRTEST:                                # loop: while (ptr1 >= array || ptr2 <= end)
     rrmovq %r11, %r12
     subq   %rdi, %r12
     jl     PTR2TEST                         # if (ptr1 < array) then test right only
     rrmovq %r14, %rbp
     subq   %r9, %rbp
     jg     PTR1TEST                         # if (ptr1 >= array && ptr2 > end) then test left only
-
-    mrmovq (%r11), %r12                     # if (ptr1 >= array && ptr2 <= end) then do both
 #
     mrmovq (%r14), %rbp
+#
+    mrmovq (%r11), %r12                     # if (ptr1 >= array && ptr2 <= end) then do both
+#
     addq   %rbp, %rbx
 #    
     addq   %r12, %rax
@@ -78,6 +79,7 @@ L2:                                         # loop: while (ptr1 >= array || ptr2
     jle    L11                              # if (sum <= leftsum), jump to L11
     rrmovq %rax, %r10                       # left_sum = sum
     rmmovq %r11, (%rdx)                     # *sa_start = ptr1
+
 L11:
     subq   %r8, %r11                        # ptr1--
     
@@ -85,9 +87,13 @@ L11:
     jle    L12                              # if (sum2 <= rightsum), jumpt to L12
     rrmovq %rbx, %r13                       # right_sum = sum2
     rmmovq %r14, (%rcx)                     # *sa_end = ptr2
+
 L12:
     addq   %r8, %r14                        # ptr2++
-    jmp    L2                               # jump to testing ptr1 and ptr2
+    jmp    BOTHPTRTEST                      # jump to testing ptr1 and ptr2
+
+
+
 
 
 
