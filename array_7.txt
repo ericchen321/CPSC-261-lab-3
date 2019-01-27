@@ -1,0 +1,31 @@
+.pos 0x2000
+array:
+    .quad 3
+    .quad 5
+    .quad 13
+    .quad 2
+    .quad 49
+    .quad 120
+    .quad 33
+    .quad 400
+    .quad 55
+    .quad 2
+    .quad 77
+    .quad 99
+    
+arraySize:
+    .quad 12
+
+.pos 0x2500
+resultStart:
+    .quad 0
+resultEnd:
+    .quad 0
+resultSum:
+    .quad 0
+
+.pos 0x2600
+reference:
+     .quad 0x2000
+     .quad 0x2058
+     .quad 858

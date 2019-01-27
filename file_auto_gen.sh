@@ -2,7 +2,7 @@
 
 rm tests/*
 
-for i in 0 1 2 3 4 5 6
+for i in 0 1 2 3 4 5 6 7
 do
   cp maxsa_ref.ys tests/maxsa_ref_array$i.ys
   printf "\n\n" >> tests/maxsa_ref_array$i.ys
@@ -11,7 +11,7 @@ do
   cat stack_end.txt >> tests/maxsa_ref_array$i.ys
 done
 
-for i in 0 1 2 3 4 5 6
+for i in 0 1 2 3 4 5 6 7
 do
   cp maxsa_reorder.ys tests/maxsa_reorder_array$i.ys
   printf "\n\n" >> tests/maxsa_reorder_array$i.ys
