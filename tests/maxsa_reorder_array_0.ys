@@ -15,17 +15,20 @@ main:
 maxSubArray:
     irmovq $1, %r9
     subq   %rsi, %r9
-    je     L10
-    
+    jne     L10
+    rmmovq %rdi, (%rcx)
+    rmmovq %rdi, (%rdx)
+    mrmovq (%rdi), %rax
+    rrmovq %r13, %rax
+    ret
+
+L10:    
     pushq  %rbx
     pushq  %rbp
     pushq  %r12
     pushq  %r13
     pushq  %r14
-        
-    
-    
-    
+              
 L1:
     rrmovq %rsi, %rbx
     irmovq $2, %r10
@@ -128,16 +131,6 @@ L9:
     popq   %r12
     popq   %rbp
     popq   %rbx
-    ret
-    
-
-L10:
-    pushq %r13
-    rmmovq %rdi, (%rcx)
-    rmmovq %rdi, (%rdx)
-    mrmovq (%rdi), %r13
-    rrmovq %r13, %rax
-    popq  %r13
     ret
 
 .pos 0x2000
