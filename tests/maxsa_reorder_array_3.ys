@@ -19,35 +19,33 @@ maxSubArray:
     rmmovq %rdi, (%rcx)
     rmmovq %rdi, (%rdx)
     mrmovq (%rdi), %rax
-    rrmovq %r13, %rax
     ret
 
 L10:    
     pushq  %rbx
-    pushq  %rbp
-    pushq  %r12
-    pushq  %r13
-    pushq  %r14
               
 L1:
     rrmovq %rsi, %rbx
     irmovq $2, %r10
+    pushq  %rbp
     divq   %r10, %rbx
     irmovq $8, %rbp
     irmovq $8, %r8
     rrmovq %rsi, %r9
+    pushq  %r12
     mulq   %rbx, %rbp
     
     
     addq   %rdi, %rbp
     mulq   %r8, %r9
+    pushq  %r13
     
     addq   %rdi, %r9
     xorq   %rax, %rax
     rrmovq %rbp, %r11
     irmovq $0x8000000000000000, %r10
     subq   %r8, %r9
-    
+    pushq  %r14
    
     
     subq   %r8, %r11
