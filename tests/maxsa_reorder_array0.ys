@@ -178,6 +178,7 @@ L9:
 L10:
     rmmovq %rdi, (%rcx)
     rmmovq %rdi, (%rdx)
+    mrmovq (%rdi), %r13
     rrmovq %r13, %rax
     ret
 

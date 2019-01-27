@@ -181,3 +181,31 @@ L10:
     mrmovq (%rdi), %r13
     rrmovq %r13, %rax
     ret
+
+
+.pos 0x2000
+array:
+    .quad 19
+    
+arraySize:
+    .quad 1
+
+.pos 0x2500
+resultStart:
+    .quad 0
+resultEnd:
+    .quad 0
+resultSum:
+    .quad 0
+
+.pos 0x2600
+reference:
+     .quad 0x2000
+     .quad 0x2000
+     .quad 19
+
+.pos 0x4000
+stack:
+    .quad 0, 1000
+stackEnd:
+    .quad 0
