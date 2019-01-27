@@ -18,14 +18,14 @@ maxSubArray:
     je    L10
 
     pushq  %rbx
-    pushq  %rbp
-    pushq  %r12
-    pushq  %r13
-    pushq  %r14
+    
+    
+    
     
 L1:
     rrmovq %rsi, %rbx
     irmovq $2, %r10
+    pushq  %rbp
     divq   %r10, %rbx                       # rbx has half, half = size >> 1
     irmovq $8, %rbp                         # rbp = 8
     irmovq $8, %r8                          # r8 = 8
@@ -34,6 +34,8 @@ L1:
     
     addq   %rdi, %rbp                       # rbp is long* mid, rbp = array base + offset
     mulq   %r8, %r9                         # r9 = 8 * array size (size offset)
+    pushq  %r12
+    
     
     addq   %rdi, %r9                        # r9 = array base + size offset
     xorq   %rax, %rax                       # rax has sum, sum = 0
@@ -42,7 +44,9 @@ L1:
     subq   %r8, %r9                         # r9 is long* end, r9 = array + base + size offset - 1
 
     subq   %r8, %r11                        # r11 has ptr1, ptr1 = mid - 1
+    pushq  %r13
     irmovq $0x8000000000000000, %r13        # r13 has right_sum, right_sum = LONG_MIN
+    pushq  %r14
     
     pushq  %rbx                             # save half to stack before the two for loops
     pushq  %rbp                             # save mid to stack before the two for loops
