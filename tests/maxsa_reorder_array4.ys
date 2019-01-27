@@ -187,42 +187,14 @@ L10:
 
 .pos 0x2000
 array:
-    .quad 13
-    .quad -3
-    .quad -25
-    .quad -20
-    .quad -3
-    .quad -16
-    .quad -23
-    .quad 18  # 2038
-    .quad 20
-    .quad -7
-    .quad 12  # 2050
-
+    .quad -100
     .quad -2
-    .quad 99  # 2060
-    .quad 33
-    .quad 67
-    .quad -1
-    .quad 101 # 2080
-    .quad 32
-    .quad 102
-    .quad 55
-    .quad 44
-    .quad 21
-    .quad -1
-    .quad 7
-    .quad 49
-    .quad 3
-
-    .quad -5
-    .quad -22
-    .quad 15
     .quad -4
-    .quad 7
-
+    .quad -9
+    .quad -1
+    .quad -44
 arraySize:
-    .quad 31
+    .quad 6
 
 .pos 0x2500
 resultStart:
@@ -234,9 +206,9 @@ resultSum:
 
 .pos 0x2600
 reference:
-     .quad 0x2038
-     .quad 0x20C8
-     .quad 652
+     .quad 0x2020
+     .quad 0x2020
+     .quad -1
 
 .pos 0x4000
 stack:

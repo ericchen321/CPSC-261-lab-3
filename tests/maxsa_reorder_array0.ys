@@ -176,10 +176,12 @@ L9:
     ret
 
 L10:
+    pushq %r13
     rmmovq %rdi, (%rcx)
     rmmovq %rdi, (%rdx)
     mrmovq (%rdi), %r13
     rrmovq %r13, %rax
+    popq %r13
     ret
 
 
