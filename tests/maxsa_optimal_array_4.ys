@@ -55,7 +55,7 @@ L1:
     xorq   %rbx, %rbx                       # rbx has sum2
 
 
-L2:                                         # loop: while (ptr1 >= array || ptr2 <= end)
+BOTHPTRTEST:                                # loop: while (ptr1 >= array || ptr2 <= end)
     rrmovq %r11, %r12
     subq   %rdi, %r12
     jl     PTR2TEST                         # if (ptr1 < array) then test right only
@@ -90,7 +90,7 @@ L11:
 
 L12:
     addq   %r8, %r14                        # ptr2++
-    jmp    L2                               # jump to testing ptr1 and ptr2
+    jmp    BOTHPTRTEST                      # jump to testing ptr1 and ptr2
 
 
 
@@ -199,8 +199,19 @@ array:
     .quad -9
     .quad -1
     .quad -44
+    .quad -55
+    .quad -71
+    .quad -141
+    .quad -93
+    .quad -2
+    .quad -2
+    .quad -4
+    .quad -3
+    .quad -5
+    .quad -7
+    .quad -930
 arraySize:
-    .quad 6
+    .quad 17
 
 .pos 0x2500
 resultStart:
