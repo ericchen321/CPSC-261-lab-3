@@ -1,7 +1,7 @@
                         SEQ, PIPE-S, PIPE-F, PIPE-FBP
-cycles,                  0,     0,       0,      0
-instructions,            0,     0,       0,      0
-cycles: reorder,         0,     0,       0,      0
-instructions: reorder,   0,     0,       0,      0
+cycles,                  1514,  3962,    1941,   1741
+instructions,            1514,  1514,    1514,   1514
+cycles: reorder,         1370,  2972,    1797,   1597
+instructions: reorder,   1370,  1370,    1370,   1370
 cycles: optimal ,        0,     0,       0,      0
 instructions: optimal,   0,     0,       0,      0
