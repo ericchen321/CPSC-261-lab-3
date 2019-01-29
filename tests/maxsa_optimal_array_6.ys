@@ -51,7 +51,7 @@ L1:
     rrmovq %rbp, %r14                       # r14 has ptr2, ptr2 = mid
     xorq   %rbx, %rbx                       # rbx has sum2
 
-DOBOTH:                                     # do-while loop when neither ptrs hits neither ends
+DOBOTH:                                     # do when neither ptrs hits neither ends
 #
     mrmovq (%r14), %rbp
 #
@@ -82,7 +82,7 @@ L12:
     addq   %r8, %r14                        # ptr2++
     
 
-BOTHPTRTEST:                                # loop: while (ptr1 >= array || ptr2 <= end)
+BOTHPTRTEST:                                # do-while loop: while (ptr1 >= array || ptr2 <= end)
     rrmovq %r11, %r12
     subq   %rdi, %r12
     jl     PTR2TEST                         # if (ptr1 < array) then test right only
@@ -134,31 +134,63 @@ L6:
 
 
 L7:
-    popq   %rbp                             # pop mid from stack
-    rrmovq %rsi, %r9
-    popq   %rbx                             # pop half from stack
-    addq   %r10, %r13
-    rrmovq %rcx, %r14   
-    rrmovq %rdx, %r12
-    subq   %rbx, %r9
-    rrmovq %rbx, %rsi
-    rrmovq %r9, %rbx
-    pushq  %rdx
+    popq   %rbp                             # rbp has mid
+    irmovq $1, %r11                         # r11 = 1
+    popq   %rbx                             # rbx has half
+    rrmovq %rsi, %r9                        # r9 = size
+    addq   %r10, %r13                       # r13 has bestsum, bestsum = leftsum + rightsum
+    rrmovq %rcx, %r14                       # r14 = address holding max array's ending address
+    rrmovq %rdx, %r12                       # r12 = address holding max array's starting address
+    rrmovq %rbx, %rsi                       # size for next maxsa call is half
+    subq   %rbx, %r9                        # r9 = size - half
+    rrmovq %r9, %rdx                        # rdx has size - half
+    subq   %rbx, %r11                       # compare half with 1
+    jne    L1STNONBASE                      # if next call is not base case
+    rrmovq %rdi, %r12                       # else save array's 1st address as starting/ending address in r12
+    mrmovq (%rdi), %rax                     # rax has sum
+    rrmovq %rax, %r9                        # r9 = sum
+    subq   %r13, %r9                        # r9 = sum - bestsum
+    jle    L8                               # if sum <= bestsum, then go to L8
+    rmmovq %rdi, (%r12)                     # else *sa_start = sub_start;
+    rrmovq %rax, %r13                       # bestsum = sum
+    rmmovq %rdi, (%r12)                     # *sa_end = sub_end; (still using r12 since next call is base case)
+    jmp    L8
+
+L1STNONBASE:                                # first call to maxsa is a non-base case call
+    pushq  %rdx                             # push rdx to stack
     rrmovq %rsp, %rdx
-    pushq  %rcx
+    pushq  %rcx                             # push rcx to stack
     rrmovq %rsp, %rcx
     call   maxSubArray
-    popq   %rcx
-    rrmovq %rax, %r9
+    popq   %rcx    
+    rrmovq %rax, %r9                        # r9 = sum
     popq   %rdx
-    subq   %r13, %r9
-    jle    L8
-    rmmovq %rdx, (%r12)
-    rrmovq %rax, %r13
-    rmmovq %rcx, (%r14)
+    subq   %r13, %r9                        # r9 = sum - bestsum
+    jle    L8                               # if sum <= bestsum, then go to L8
+    rmmovq %rdx, (%r12)                     # else *sa_start = sub_start;
+    rrmovq %rax, %r13                       # bestsum = sum
+    rmmovq %rcx, (%r14)                     # *sa_end = sub_end;
+
+
 L8:
+    rrmovq %rbx, %rsi                       # rsi has size - half
+    irmovq $1, %r11                         # r11 = 1
+    subq   %rsi, %r11                       # compare size - half with 1
+    jne    L2NDNONBASE                      # if next call is not base case
+    rrmovq %rbp, %r12                       # else save array's mid address as starting/ending address in r12
+    mrmovq (%rbp), %rax                     # rax has sum
+    rrmovq %rax, %r9                        # r9 = sum
+    subq   %r13, %r9                        # r9 = sum - bestsum
+    jle    L9                               # if sum <= bestsum, then go to L9
+    irmovq $8, %r9
+    addq   %r9, %rdi                        # rdi now has the ending address of the array
+    rmmovq %rdi, (%r12)                     # else *sa_start = sub_start;
+    rrmovq %rax, %r13                       # bestsum = sum
+    rmmovq %rdi, (%r12)                     # *sa_end = sub_end; (still using r12 since next call is base case)
+    jmp    L9
+
+L2NDNONBASE:                                # 2nd call to maxsa is a non-base call
     rrmovq %rbp, %rdi
-    rrmovq %rbx, %rsi
     pushq  %rdx
     rrmovq %rsp, %rdx
     pushq  %rcx
