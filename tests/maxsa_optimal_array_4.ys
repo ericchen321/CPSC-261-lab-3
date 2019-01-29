@@ -15,12 +15,9 @@ main:
 maxSubArray:
     irmovq $1, %r9
     subq   %rsi, %r9
-    je    L10
+    je     BASE
 
     pushq  %rbx
-    
-    
-    
     
 L1:
     rrmovq %rsi, %rbx
@@ -54,14 +51,7 @@ L1:
     rrmovq %rbp, %r14                       # r14 has ptr2, ptr2 = mid
     xorq   %rbx, %rbx                       # rbx has sum2
 
-
-BOTHPTRTEST:                                # loop: while (ptr1 >= array || ptr2 <= end)
-    rrmovq %r11, %r12
-    subq   %rdi, %r12
-    jl     PTR2TEST                         # if (ptr1 < array) then test right only
-    rrmovq %r14, %rbp
-    subq   %r9, %rbp
-    jg     PTR1TEST                         # if (ptr1 >= array && ptr2 > end) then test left only
+DOBOTH:                                     # do-while loop when neither ptrs hits neither ends
 #
     mrmovq (%r14), %rbp
 #
@@ -84,13 +74,23 @@ L11:
     subq   %r8, %r11                        # ptr1--
     
     subq   %r13, %rbp
-    jle    L12                              # if (sum2 <= rightsum), jumpt to L12
+    jle    L12                              # if (sum2 <= rightsum), jump to L12
     rrmovq %rbx, %r13                       # right_sum = sum2
     rmmovq %r14, (%rcx)                     # *sa_end = ptr2
 
 L12:
     addq   %r8, %r14                        # ptr2++
-    jmp    BOTHPTRTEST                      # jump to testing ptr1 and ptr2
+    
+
+BOTHPTRTEST:                                # loop: while (ptr1 >= array || ptr2 <= end)
+    rrmovq %r11, %r12
+    subq   %rdi, %r12
+    jl     PTR2TEST                         # if (ptr1 < array) then test right only
+    rrmovq %r14, %rbp
+    subq   %r9, %rbp
+    jg     PTR1TEST                         # if (ptr1 >= array && ptr2 > end) then test left only
+    jmp    DOBOTH                           # jump to testing ptr1 and ptr2
+
 
 
 
@@ -181,11 +181,12 @@ L9:
     popq   %rbx
     ret
 
-L10:
+BASE:
     rmmovq %rdi, (%rcx)
     rmmovq %rdi, (%rdx)
     mrmovq (%rdi), %rax
     ret
+
 
 
 .pos 0x2000
