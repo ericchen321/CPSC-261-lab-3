@@ -3,5 +3,5 @@ cycles,                  29,    79,      38,     36
 instructions,            29,    29,      29,     29
 cycles: reorder,         17,    35,      26,     24
 instructions: reorder,   17,    17,      17,     17
-cycles: optimal ,        0,     0,       0,      0
-instructions: optimal,   0,     0,       0,      0
+cycles: optimal ,        17,    35,      26,     26
+instructions: optimal,   17,    17,      17,     17

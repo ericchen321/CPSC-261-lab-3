@@ -1,29 +1,29 @@
 .pos 0x100
 main:
-    irmovq $stackEnd, %rsp
-    irmovq $array, %rdi
-    irmovq $arraySize, %rsi
-    mrmovq (%rsi), %rsi
-    irmovq $resultStart, %rdx
-    irmovq $resultEnd, %rcx
-    call   maxSubArray
-    irmovq $resultSum, %r8
-    rmmovq %rax, (%r8)
-    halt
+    irmovq $stackEnd, %rsp		# passing address of end of stack to %rsp
+    irmovq $array, %rdi			# passing array pointer to %rdi
+    irmovq $arraySize, %rsi		# passing address of array size to %rsi
+    mrmovq (%rsi), %rsi			# passing array size to %rsi
+    irmovq $resultStart, %rdx		# passing address of resultStart to %rdx
+    irmovq $resultEnd, %rcx		# passing address of resultEnd to %rcx
+    call   maxSubArray			# calls the function maxSubArray
+    irmovq $resultSum, %r8		# save address of resultSum to %r8
+    rmmovq %rax, (%r8)			# save the sum in resultSum
+    halt				# stops the code
 
 .pos 0x1000
 maxSubArray:
-    pushq  %rbx
+    pushq  %rbx				    #Next 5 lines are saving registers 
     pushq  %rbp
     pushq  %r12
     pushq  %r13
     pushq  %r14
-    irmovq $1, %r9
-    subq   %rsi, %r9
-    jne    L1                                # if (size != 1), then jump to L1
-    rmmovq %rdi, (%rcx)
-    rmmovq %rdi, (%rdx)
-    mrmovq (%rdi), %r13
+    irmovq $1, %r9			    # move 1 to %r9 for comparison
+    subq   %rsi, %r9			    # sub to set flags for comparison
+    jne    L1                               # if (size != 1), then jump to L1
+    rmmovq %rdi, (%rcx)			    # if size == 1 then resultEnd and resultStart are the array pointer
+    rmmovq %rdi, (%rdx)			    
+    mrmovq (%rdi), %r13			    # 
     jmp    L9
 L1:
     irmovq $2, %r10

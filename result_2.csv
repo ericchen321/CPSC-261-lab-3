@@ -3,5 +3,5 @@ cycles,                  4445,  11654,   5764,   5144
 instructions,            4445,  4445,    4445,   4445
 cycles: reorder,         4073,  9030,    5392,   4772
 instructions: reorder,   4073,  4073,    4073,   4073
-cycles: optimal ,        0,     0,       0,      0
-instructions: optimal,   0,     0,       0,      0
+cycles: optimal ,        2231,  4637,    2913,   2533
+instructions: optimal,   2231,  2231,    2231,   2231

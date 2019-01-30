@@ -3,5 +3,5 @@ cycles,                  143,   376,     180,    166
 instructions,            143,   143,     143,    143
 cycles: reorder,         119,   246,     156,    142
 instructions: reorder,   119,   119,     119,    119
-cycles: optimal ,        0,     0,       0,      0
-instructions: optimal,   0,     0,       0,      0
+cycles: optimal ,        99,    205,     126,    114
+instructions: optimal,   99,    99,      99,     99

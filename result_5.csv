@@ -3,5 +3,5 @@ cycles,                  659,   1728,    838,    762
 instructions,            659,   659,     659,    659
 cycles: reorder,         587,   1254,    1254,   1254
 instructions: reorder,   587,   587,     587,    587
-cycles: optimal ,        0,     0,       0,      0
-instructions: optimal,   0,     0,       0,      0
+cycles: optimal ,        341,   707,     438,    390
+instructions: optimal,   341,   341,     341,    341
